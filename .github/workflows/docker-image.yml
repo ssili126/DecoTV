@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Docker 标签'
+        description: 'Docker test'
         required: false
         default: 'latest'
         type: string
