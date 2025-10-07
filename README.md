@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD033 MD026 MD034 -->
 
-# DecoTV
+# DecoTV test
 
 <div align="center"src="public/logo.png" alt="DecoTV Logo" width="120">
 </div>
