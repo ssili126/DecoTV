@@ -2008,6 +2008,18 @@ function PlayPageClient() {
                   {detail.desc}
                 </div>
               )}
+              {/* 【新增】m3u8链接展示区域（紧跟剧情简介后） */}
+              <div 
+                className="mt-3 p-3 bg-gray-50 rounded-md text-sm scrollbar-hide"
+                style={{ whiteSpace: 'pre-line' }}
+              >
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 0.5 }}>
+                  当前播放链接（m3u8）：
+                </Typography>
+                <Typography variant="body2" color="primary" sx={{ wordBreak: 'break-all' }}>
+                  {videoUrl || '暂未获取到播放链接'} {/* 使用原文件正确的m3u8变量 videoUrl */}
+                </Typography>
+              </div>
             </div>
           </div>
 
