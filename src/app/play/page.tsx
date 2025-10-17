@@ -2013,11 +2013,11 @@ function PlayPageClient() {
                 className="mt-3 p-3 bg-gray-50 rounded-md text-sm scrollbar-hide"
                 style={{ whiteSpace: 'pre-line' }}
               >
-                <p variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 0.5 }}>
+                <p className="text-gray-600 font-medium mb-1 text-xs">
                   当前播放链接（m3u8）：
                 </p>
-                <p variant="body2" color="primary" sx={{ wordBreak: 'break-all' }}>
-                  {videoUrl || '暂未获取到播放链接'} {/* 使用原文件正确的m3u8变量 videoUrl */}
+                <p className="text-blue-600 text-xs break-all">
+                  {videoUrl || '暂未获取到播放链接'}
                 </p>
               </div>
             </div>
