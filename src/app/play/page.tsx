@@ -2014,7 +2014,7 @@ function PlayPageClient() {
                 className="mt-3 p-3 bg-gray-50 rounded-md text-sm scrollbar-hide"
                 style={{ whiteSpace: 'pre-line' }}
               >
-                {/* 当前播放链接 */}
+                {/* 当前播放链接（沿用原有的 videoUrl） */}
                 <p className="text-gray-600 font-medium mb-1 text-xs">
                   当前播放链接（m3u8）：
                 </p>
@@ -2022,14 +2022,16 @@ function PlayPageClient() {
                   {videoUrl || '暂未获取到播放链接'}
                 </p>
 
-                {/* 所有剧集链接（如果存在多集） */}
-                {totalEpisodes > 1 && currentSource?.episodes && (
+                {/* 所有剧集链接（使用匹配到的完整源对象中的 episodes） */}
+                {/* 先判断：1. 完整源对象存在 2. 有剧集数组 3. 剧集数>1（多集才显示） */}
+                {selectedFullSource && selectedFullSource.episodes && selectedFullSource.episodes.length > 1 && (
                   <>
                     <p className="text-gray-600 font-medium mb-1 text-xs">
-                      所有剧集链接（共 {totalEpisodes} 集）：
+                      所有剧集链接（共 {selectedFullSource.episodes.length} 集）：
                     </p>
                     <div className="max-h-60 overflow-y-auto pr-1">
-                      {currentSource.episodes.map((url: string, index: number) => (
+                      {/* 循环渲染所有m3u8地址 */}
+                      {selectedFullSource.episodes.map((url: string, index: number) => (
                         <div 
                           key={index} 
                           className={`flex items-start p-1.5 rounded ${
@@ -2042,7 +2044,7 @@ function PlayPageClient() {
                             第 {index + 1} 集
                           </span>
                           <p className="text-blue-600 text-xs break-all flex-1">
-                            {url}
+                            {url} {/* 直接显示原程序已获取的m3u8地址，无额外处理 */}
                           </p>
                         </div>
                       ))}
