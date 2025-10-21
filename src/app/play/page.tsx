@@ -146,9 +146,6 @@ function PlayPageClient() {
     videoYear,
   ]);
 
-// 第 103 行（videoUrl 之前）新增：定义变量，匹配完整源对象
-const selectedFullSource = availableSources.find(item => item.source === currentSource) || null;
-
   // 视频播放地址
   const [videoUrl, setVideoUrl] = useState('');
 
@@ -900,6 +897,9 @@ const selectedFullSource = availableSources.find(item => item.source === current
         setError('未找到匹配结果');
         return;
       }
+
+// 第 103 行（videoUrl 之前）新增：定义变量，匹配完整源对象
+const selectedFullSource = availableSources.find(item => item.source === currentSource) || null;
 
       // 尝试跳转到当前正在播放的集数
       let targetIndex = currentEpisodeIndex;
