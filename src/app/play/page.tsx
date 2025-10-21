@@ -7,6 +7,7 @@ import Hls from 'hls.js';
 import { Heart } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
+import { resolveUrl } from '@/lib/live';
 
 import {
   deleteFavorite,
@@ -2008,18 +2009,69 @@ function PlayPageClient() {
                   {detail.desc}
                 </div>
               )}
+
               {/* 【新增】m3u8链接展示区域（紧跟剧情简介后） */}
               <div 
-                className="mt-3 p-3 bg-gray-50 rounded-md text-sm scrollbar-hide"
+                className="mt-3 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-md text-sm scrollbar-hide border border-gray-200 dark:border-gray-800"
                 style={{ whiteSpace: 'pre-line' }}
               >
-                <p className="text-gray-600 font-medium mb-1 text-xs">
-                  当前播放链接（m3u8）：
-                </p>
-                <p className="text-blue-600 text-xs break-all">
-                  {videoUrl || '暂未获取到播放链接'}
-                </p>
+                {/* 当前集链接 */}
+                <div className="mb-2">
+                  <p className="text-gray-600 dark:text-gray-400 font-medium mb-1 text-xs">
+                    当前播放链接（第 {currentEpisodeIndex + 1} 集）：
+                  </p>
+                  <div className="flex items-center">
+                    <p className="text-blue-600 dark:text-blue-400 text-xs break-all flex-1">
+                      {videoUrl || '暂未获取到播放链接'}
+                    </p>
+                    <button 
+                      onClick={() => navigator.clipboard.writeText(videoUrl || '')}
+                      className="ml-2 text-xs px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+                    >
+                      复制
+                    </button>
+                  </div>
+                </div>
+
+                {/* 所有集链接（如果是多集内容） */}
+                {totalEpisodes > 1 && currentSource?.episodes && (
+                  <div>
+                    <p className="text-gray-600 dark:text-gray-400 font-medium mb-1 text-xs mt-3">
+                      所有剧集链接（共 {totalEpisodes} 集）：
+                    </p>
+                    <div className="max-h-60 overflow-y-auto pr-1 scrollbar-thin">
+                      {currentSource.episodes.map((url, index) => {
+                        // 处理相对路径链接
+                        const fullUrl = url.startsWith('http') ? url : resolveUrl(currentSource.baseUrl || '', url);
+                        return (
+                          <div 
+                            key={index} 
+                            className={`flex items-center p-1.5 rounded ${
+                              index === currentEpisodeIndex 
+                                ? 'bg-blue-50 dark:bg-blue-900/20' 
+                                : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                            }`}
+                          >
+                            <span className="text-gray-500 dark:text-gray-500 text-xs w-10">
+                              第 {index + 1} 集
+                            </span>
+                            <p className="text-blue-600 dark:text-blue-400 text-xs break-all flex-1">
+                              {fullUrl}
+                            </p>
+                            <button 
+                              onClick={() => navigator.clipboard.writeText(fullUrl)}
+                              className="ml-2 text-xs px-1.5 py-0.25 bg-blue-100/70 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors"
+                            >
+                              复制
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
+
             </div>
           </div>
 
