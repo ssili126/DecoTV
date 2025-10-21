@@ -2014,12 +2014,41 @@ function PlayPageClient() {
                 className="mt-3 p-3 bg-gray-50 rounded-md text-sm scrollbar-hide"
                 style={{ whiteSpace: 'pre-line' }}
               >
+                {/* 当前播放链接 */}
                 <p className="text-gray-600 font-medium mb-1 text-xs">
                   当前播放链接（m3u8）：
                 </p>
-                <p className="text-blue-600 text-xs break-all">
+                <p className="text-blue-600 text-xs break-all mb-3">
                   {videoUrl || '暂未获取到播放链接'}
                 </p>
+
+                {/* 所有剧集链接（如果存在多集） */}
+                {totalEpisodes > 1 && currentSource?.episodes && (
+                  <>
+                    <p className="text-gray-600 font-medium mb-1 text-xs">
+                      所有剧集链接（共 {totalEpisodes} 集）：
+                    </p>
+                    <div className="max-h-60 overflow-y-auto pr-1">
+                      {currentSource.episodes.map((url: string, index: number) => (
+                        <div 
+                          key={index} 
+                          className={`flex items-start p-1.5 rounded ${
+                            index === currentEpisodeIndex 
+                              ? 'bg-blue-50' 
+                              : 'hover:bg-gray-100'
+                          }`}
+                        >
+                          <span className="text-gray-500 text-xs w-10 mt-0.5">
+                            第 {index + 1} 集
+                          </span>
+                          <p className="text-blue-600 text-xs break-all flex-1">
+                            {url}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             
             </div>
