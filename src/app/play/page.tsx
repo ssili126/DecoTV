@@ -2033,16 +2033,16 @@ function PlayPageClient() {
                   </div>
                 </div>
 
+
                 {/* 所有集链接（如果是多集内容） */}
-                {totalEpisodes > 1 && currentSource?.episodes && (
+                {totalEpisodes > 1 && episodes && episodes.length > 0 && (
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 font-medium mb-1 text-xs mt-3">
                       所有剧集链接（共 {totalEpisodes} 集）：
                     </p>
                     <div className="max-h-60 overflow-y-auto pr-1 scrollbar-thin">
-                      {currentSource.episodes.map((url, index) => {
-                        // 处理相对路径链接
-                        const fullUrl = url.startsWith('http') ? url : resolveUrl(currentSource.baseUrl || '', url);
+                      {episodes.map((url, index) => {
+                        // 直接使用原程序已有链接，无需额外处理
                         return (
                           <div 
                             key={index} 
@@ -2056,10 +2056,10 @@ function PlayPageClient() {
                               第 {index + 1} 集
                             </span>
                             <p className="text-blue-600 dark:text-blue-400 text-xs break-all flex-1">
-                              {fullUrl}
+                              {url}
                             </p>
                             <button 
-                              onClick={() => navigator.clipboard.writeText(fullUrl)}
+                              onClick={() => navigator.clipboard.writeText(url)}
                               className="ml-2 text-xs px-1.5 py-0.25 bg-blue-100/70 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors"
                             >
                               复制
@@ -2070,6 +2070,8 @@ function PlayPageClient() {
                     </div>
                   </div>
                 )}
+              
+
               </div>
 
             </div>
