@@ -7,7 +7,6 @@ import Hls from 'hls.js';
 import { Heart } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { resolveUrl } from '@/lib/live';
 
 import {
   deleteFavorite,
@@ -2010,72 +2009,19 @@ function PlayPageClient() {
                 </div>
               )}
 
-                  {/* 当前及所有剧集m3u8链接展示（与原文件<Description />组件同级缩进） */}
-    <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-md text-sm border border-gray-200 dark:border-gray-800">
-        {/* 当前集链接（子元素缩进4格，匹配原文件内部嵌套风格） */}
-        <div className="mb-3">
-            <p className="text-gray-600 dark:text-gray-400 font-medium mb-1 text-xs">
-                当前播放链接（第 {currentEpisodeIndex + 1} 集）：
-            </p>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                <p className="text-blue-600 dark:text-blue-400 text-xs break-all flex-1">
-                    {resolveUrl(currentSource?.baseUrl || '', currentSource?.episodes?.[currentEpisodeIndex] || '') || '暂未获取链接'}
+              {/* 【新增】m3u8链接展示区域（紧跟剧情简介后） */}
+              <div 
+                className="mt-3 p-3 bg-gray-50 rounded-md text-sm scrollbar-hide"
+                style={{ whiteSpace: 'pre-line' }}
+              >
+                <p className="text-gray-600 font-medium mb-1 text-xs">
+                  当前播放链接（m3u8）：
                 </p>
-                <button 
-                    onClick={() => {
-                        const currentUrl = resolveUrl(currentSource?.baseUrl || '', currentSource?.episodes?.[currentEpisodeIndex] || '');
-                        navigator.clipboard.writeText(currentUrl);
-                        toast.success('已复制当前集链接');
-                    }}
-                    className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
-                >
-                    复制当前集
-                </button>
-            </div>
-        </div>
-
-        {/* 所有剧集链接（子元素缩进4格，仅多集时显示） */}
-        {currentSource?.episodes && currentSource.episodes.length > 1 && (
-            <div>
-                <p className="text-gray-600 dark:text-gray-400 font-medium mb-2 text-xs">
-                    所有剧集链接（共 {currentSource.episodes.length} 集）：
+                <p className="text-blue-600 text-xs break-all">
+                  {videoUrl || '暂未获取到播放链接'}
                 </p>
-                <div className="max-h-60 overflow-y-auto pr-1 scrollbar-thin">
-                    {currentSource.episodes.map((episodeUrl, index) => {
-                        const fullUrl = resolveUrl(currentSource.baseUrl || '', episodeUrl);
-                        return (
-                            <div 
-                                key={index} 
-                                className={`flex flex-col sm:flex-row items-start sm:items-center gap-2 p-2 mb-1 rounded ${
-                                    index === currentEpisodeIndex 
-                                        ? 'bg-blue-50 dark:bg-blue-900/20' 
-                                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
-                                }`}
-                            >
-                                <span className="text-gray-500 dark:text-gray-400 text-xs w-12">
-                                    第 {index + 1} 集
-                                </span>
-                                <p className="text-blue-600 dark:text-blue-400 text-xs break-all flex-1">
-                                    {fullUrl}
-                                </p>
-                                <button 
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(fullUrl);
-                                        toast.success(`已复制第 ${index + 1} 集链接`);
-                                    }}
-                                    className="px-2 py-0.5 text-xs bg-blue-100/70 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors"
-                                >
-                                    复制
-                                </button>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        )}
-    </div>
-
-
+              </div>
+            
             </div>
           </div>
 
