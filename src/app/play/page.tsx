@@ -2009,7 +2009,7 @@ function PlayPageClient() {
                 </div>
               )}
 
-              {/* 【修改】m3u8链接展示区域（紧跟剧情简介后） */}
+              {/* 【最终版】m3u8链接展示区域（紧跟剧情简介后） */}
               <div 
                 className="mt-3 p-3 bg-gray-50 rounded-md text-sm scrollbar-hide"
                 style={{ whiteSpace: 'pre-line' }}
@@ -2022,35 +2022,34 @@ function PlayPageClient() {
                   {videoUrl || '暂未获取到播放链接'}
                 </p>
 
-                {/* 所有剧集链接（直接使用原程序 availableSources，无需新增变量） */}
-                {/* 1. 先匹配当前源对象 2. 确保有剧集且多集才显示 */}
-                {availableSources.find(item => item.source === currentSource)?.episodes?.length > 1 && (
-                  <>
-                    {/* 从原数组中获取当前源的剧集总数 */}
-                    <p className="text-gray-600 font-medium mb-1 text-xs">
-                      所有剧集链接（共 {availableSources.find(item => item.source === currentSource)?.episodes.length} 集）：
-                    </p>
-                    <div className="max-h-60 overflow-y-auto pr-1">
-                      {/* 循环渲染当前源的所有剧集地址 */}
-                      {availableSources.find(item => item.source === currentSource)?.episodes.map((url: string, index: number) => (
-                        <div 
-                          key={index} 
-                          className={`flex items-start p-1.5 rounded ${
-                            index === currentEpisodeIndex 
-                              ? 'bg-blue-50' 
-                              : 'hover:bg-gray-100'
-                          }`}
-                        >
-                          <span className="text-gray-500 text-xs w-10 mt-0.5">
-                            第 {index + 1} 集
-                          </span>
-                          <p className="text-blue-600 text-xs break-all flex-1">
-                            {url} {/* 直接显示原程序已有的m3u8地址 */}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </>
+                {/* 所有剧集链接（彻底修复空值错误） */}
+                {availableSources.find(item => item.source === currentSource) && (
+                  ((currentSourceObj) => (currentSourceObj.episodes.length > 1 && (
+                    <>
+                      <p className="text-gray-600 font-medium mb-1 text-xs">
+                        所有剧集链接（共 {currentSourceObj.episodes.length} 集）：
+                      </p>
+                      <div className="max-h-60 overflow-y-auto pr-1">
+                        {currentSourceObj.episodes.map((url: string, index: number) => (
+                          <div 
+                            key={index} 
+                            className={`flex items-start p-1.5 rounded ${
+                              index === currentEpisodeIndex 
+                                ? 'bg-blue-50' 
+                                : 'hover:bg-gray-100'
+                            }`}
+                          >
+                            <span className="text-gray-500 text-xs w-10 mt-0.5">
+                              第 {index + 1} 集
+                            </span>
+                            <p className="text-blue-600 text-xs break-all flex-1">
+                              {url}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )))(availableSources.find(item => item.source === currentSource)!)
                 )}
               </div>
             
