@@ -898,9 +898,6 @@ function PlayPageClient() {
         return;
       }
 
-// 第 103 行（videoUrl 之前）新增：定义变量，匹配完整源对象
-const selectedFullSource = availableSources.find(item => item.source === currentSource) || null;
-
       // 尝试跳转到当前正在播放的集数
       let targetIndex = currentEpisodeIndex;
 
@@ -2012,7 +2009,7 @@ const selectedFullSource = availableSources.find(item => item.source === current
                 </div>
               )}
 
-              {/* 【新增】m3u8链接展示区域（紧跟剧情简介后） */}
+              {/* 【修改】m3u8链接展示区域（紧跟剧情简介后） */}
               <div 
                 className="mt-3 p-3 bg-gray-50 rounded-md text-sm scrollbar-hide"
                 style={{ whiteSpace: 'pre-line' }}
@@ -2025,16 +2022,17 @@ const selectedFullSource = availableSources.find(item => item.source === current
                   {videoUrl || '暂未获取到播放链接'}
                 </p>
 
-                {/* 所有剧集链接（使用匹配到的完整源对象中的 episodes） */}
-                {/* 先判断：1. 完整源对象存在 2. 有剧集数组 3. 剧集数>1（多集才显示） */}
-                {selectedFullSource && selectedFullSource.episodes && selectedFullSource.episodes.length > 1 && (
+                {/* 所有剧集链接（直接使用原程序 availableSources，无需新增变量） */}
+                {/* 1. 先匹配当前源对象 2. 确保有剧集且多集才显示 */}
+                {availableSources.find(item => item.source === currentSource)?.episodes?.length > 1 && (
                   <>
+                    {/* 从原数组中获取当前源的剧集总数 */}
                     <p className="text-gray-600 font-medium mb-1 text-xs">
-                      所有剧集链接（共 {selectedFullSource.episodes.length} 集）：
+                      所有剧集链接（共 {availableSources.find(item => item.source === currentSource)?.episodes.length} 集）：
                     </p>
                     <div className="max-h-60 overflow-y-auto pr-1">
-                      {/* 循环渲染所有m3u8地址 */}
-                      {selectedFullSource.episodes.map((url: string, index: number) => (
+                      {/* 循环渲染当前源的所有剧集地址 */}
+                      {availableSources.find(item => item.source === currentSource)?.episodes.map((url: string, index: number) => (
                         <div 
                           key={index} 
                           className={`flex items-start p-1.5 rounded ${
@@ -2047,7 +2045,7 @@ const selectedFullSource = availableSources.find(item => item.source === current
                             第 {index + 1} 集
                           </span>
                           <p className="text-blue-600 text-xs break-all flex-1">
-                            {url} {/* 直接显示原程序已获取的m3u8地址，无额外处理 */}
+                            {url} {/* 直接显示原程序已有的m3u8地址 */}
                           </p>
                         </div>
                       ))}
